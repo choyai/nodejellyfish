@@ -1,15 +1,15 @@
 var express = require('express');
 var request = require('request');
 var router = express.Router();
-//var mongo = require('mongodb').MongoClient;
+var mongo = require('mongodb').MongoClient;
 var assert = require('assert');
-//var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 var https = require('https');
 
 var schema = require('../models/schema');
-//var db = require('../models/db');
+var db = require('../models/db');
 
-//var url = 'mongodb://localhost:27017/exampledb';
+var url = 'mongodb://localhost:27017/exampledb';
 
 //Status code
 const status = {
@@ -71,12 +71,12 @@ router.get('/test/:TeamID/:sensor', function(req, res, next) {
 //GET data for 1 teamID
 
 router.get('/team/:teamID', function(req, res, next) {
-  var resultArray = [];
   requestTeam(req, res, function(resultArray) {
-    res.render('index', {
-      title: resultArray[0].sensID
-    });
-    console.log('hey');
+    // res.render('index', {
+    //   title: resultArray[0].sensID
+    // });
+    res.send(resultArray);
+    console.log(resultArray);
   });
   console.log('ho');
 });
@@ -84,7 +84,8 @@ router.get('/team/:teamID', function(req, res, next) {
 function requestTeam(req, res, callback) {
   console.log('succ');
   var sensors = ['temperature', 'accelerometer', 'din1'];
-  /*var body = {
+  var resultArray = [];
+  var body = {
     "name":"John",
     "age":30,
     "data": [
@@ -92,14 +93,15 @@ function requestTeam(req, res, callback) {
         { "sensID":"BMW", "date":[ "320", "X3", "X5" ] },
         { "sensID":"Fiat", "date":[ "500", "Panda" ] }
     ]
- }*/
+ }
 
   for (sensor in sensors) {
-    request('http://10.0.0.10/api/' + sensor + '/' + req.params.teamID, function(error, response, body) {
+    //request('http://10.0.0.10/api/' + sensor + '/' + req.params.teamID, function(error, response, body) {
       console.log(body.data);
       resultArray.push(body.data);
-    });
+    //});
   }
+  return resultArray;
   if (typeof callback === "function") {
     callback();
   }
@@ -114,6 +116,7 @@ router.get('/db', function(req, res, next) {
     var cursor = db.collection('objects').find();
     cursor.forEach(function(doc, err) {
       assert.equal(null, err);
+      console.log(doc);
       resultArray.push(doc);
     }, function() {
       db.close();
