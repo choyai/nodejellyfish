@@ -71,39 +71,49 @@ router.get('/test/:TeamID/:sensor', function(req, res, next) {
 //GET data for 1 teamID
 
 router.get('/team/:teamID', function(req, res, next) {
-  requestTeam(req, res, function(resultArray) {
+    var resultArray = [];
+     var sensors = ['temperature', 'accelerometer', 'din1'];
+     // for(sensor in sensors){
+     //    console.log(body.data);
+     //    resultArray.push(body.data);
+     // }
+
+
+  requestTeam(req, res, sensors, function(resultArray) {
     // res.render('index', {
     //   title: resultArray[0].sensID
     // });
-    res.send(resultArray);
+    res.json(resultArray);
     console.log(resultArray);
+    console.log('yo');
   });
   console.log('ho');
 });
 
-function requestTeam(req, res, callback) {
-  console.log('succ');
-  var sensors = ['temperature', 'accelerometer', 'din1'];
-  var resultArray = [];
+function requestTeam(req, res, sensors, callback) {
   var body = {
     "name":"John",
     "age":30,
     "data": [
-        { "sensID":"Ford", "date":[ "Fiesta", "Focus", "Mustang" ] },
-        { "sensID":"BMW", "date":[ "320", "X3", "X5" ] },
-        { "sensID":"Fiat", "date":[ "500", "Panda" ] }
+      { "sensID":"Ford", "date":[ "Fiesta", "Focus", "Mustang" ] },
+      { "sensID":"BMW", "date":[ "320", "X3", "X5" ] },
+      { "sensID":"Fiat", "date":[ "500", "Panda" ] }
     ]
- }
+  }
+  console.log('succ');
+  var resultArray = [];
 
   for (sensor in sensors) {
     //request('http://10.0.0.10/api/' + sensor + '/' + req.params.teamID, function(error, response, body) {
-      console.log(body.data);
+      // console.log(body.data);
       resultArray.push(body.data);
     //});
   }
-  return resultArray;
+  // return resultArray;
+  console.log(resultArray);
+  console.log('ran');
   if (typeof callback === "function") {
-    callback();
+    callback(resultArray);
   }
 }
 
