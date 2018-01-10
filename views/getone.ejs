@@ -12,16 +12,13 @@
   <main>
     <div class="jumbotron">
       <table>
-        <% for(var i=0; i < data.length; i++) { %>
+        <% for(var i=0; i < teamdata.length; i++) { %>
           <tr>
-            <td style="width:80px;">
-              <%= data[i].sensID %>
+            <td>
+              <%= teamdata[i].name %>
             </td>
             <td>
-              <%= data[i].val %>
-            </td>
-            <td>
-              <%= data[i].date %>
+              <%= teamdata[i].date %>
             </td>
           </tr>
         <% } %>
